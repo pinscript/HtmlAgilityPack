@@ -145,6 +145,9 @@ namespace HtmlAgilityPack.Tests
         public void Test_Closing_Image()
         {
             Console.WriteLine(HtmlNode.CreateNode("<p><img id=\"foo\"></img></p>").OuterHtml);
+            Console.WriteLine(HtmlNode.CreateNode("<p><img id=\"foo\"></p>").OuterHtml);
+            Console.WriteLine(HtmlNode.CreateNode("<p><img id=\"foo\" /></p>").OuterHtml);
+            Console.WriteLine(HtmlNode.CreateNode("<p><img id=\"foo\"><img id=\"foo\"></p>").OuterHtml);
         }
     }
 }
