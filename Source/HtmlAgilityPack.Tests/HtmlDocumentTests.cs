@@ -97,7 +97,7 @@ namespace HtmlAgilityPack.Tests
         }
 
         [Test]
-        public void Test_SaveXML_Does_Change_Quotes_On_Attributes()
+        public void Test_SaveXML_Does_Not_Change_Quotes_On_Attributes()
         {
             var doc = new HtmlDocument("<html><head></head><body><a href=\"foo\">yo</a></body></html>");
             Assert.AreEqual("<html><head></head><body><a href=\"foo\">yo</a></body></html>", doc.Save());
@@ -107,7 +107,14 @@ namespace HtmlAgilityPack.Tests
         }
 
         [Test]
-        public void Test_Constructing_Document()
+        public void Test_Parse_Attribute_Containing_Quote()
+        {
+            var doc = new HtmlDocument("<html><head></head><body><a href=\"f'o'o\">yo</a></body></html>");
+            Assert.AreEqual("<html><head></head><body><a href=\"f'o'o\">yo</a></body></html>", doc.Save());
+        }
+
+        [Test]
+        public void Test_Constructing_Node_With_Single_Attribute()
         {
             var doc = new HtmlDocument();
             var a = doc.CreateElement("a");
@@ -116,8 +123,22 @@ namespace HtmlAgilityPack.Tests
 
             doc.DocumentNode.AppendChild(a);
 
-            var html = doc.Save();
-            Console.WriteLine(html);
+            Assert.AreEqual("<a href=\"foo\">foo</a>", doc.Save());
+        }
+
+        [Test]
+        public void Test_Constructing_Node_With_Multiple_Attribute()
+        {
+            var doc = new HtmlDocument();
+            var a = doc.CreateElement("a");
+            a.SetAttributeValue("href", "foo");
+            a.SetAttributeValue("b", "c");
+            a.SetAttributeValue("target", "_blank");
+            a.InnerHtml = "foo";
+
+            doc.DocumentNode.AppendChild(a);
+
+            Assert.AreEqual("<a href=\"foo\" b=\"c\" target=\"_blank\">foo</a>", doc.Save());
         }
     }
 }
