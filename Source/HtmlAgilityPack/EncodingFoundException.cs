@@ -6,28 +6,16 @@ namespace HtmlAgilityPack
 {
     internal class EncodingFoundException : Exception
     {
-        #region Fields
-
-        private Encoding _encoding;
-
-        #endregion
-
-        #region Constructors
+        private readonly Encoding _encoding;
 
         internal EncodingFoundException(Encoding encoding)
         {
             _encoding = encoding;
         }
 
-        #endregion
-
-        #region Properties
-
         internal Encoding Encoding
         {
             get { return _encoding; }
         }
-
-        #endregion
     }
 }

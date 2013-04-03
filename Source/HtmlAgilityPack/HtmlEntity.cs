@@ -1,6 +1,5 @@
 // HtmlAgilityPack V1.0 - Simon Mourier <simon underscore mourier at hotmail dot com>
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,11 +11,9 @@ namespace HtmlAgilityPack
     /// </summary>
     public class HtmlEntity
     {
-        #region Static Members
-
         private static readonly int _maxEntitySize;
-        private static Dictionary<int,string> _entityName;
-        private static Dictionary<string, int> _entityValue;
+        private static readonly Dictionary<int,string> _entityName;
+        private static readonly Dictionary<string, int> _entityValue;
 
         /// <summary>
         /// A collection of entities indexed by name.
@@ -33,10 +30,6 @@ namespace HtmlAgilityPack
         {
             get { return _entityValue; }
         }
-
-        #endregion
-
-        #region Constructors
 
         static HtmlEntity()
         {
@@ -567,10 +560,6 @@ namespace HtmlAgilityPack
         {
         }
 
-        #endregion
-
-        #region Public Methods
-
         /// <summary>
         /// Replace known entities by characters.
         /// </summary>
@@ -584,11 +573,11 @@ namespace HtmlAgilityPack
             if (text.Length == 0)
                 return text;
 
-            StringBuilder sb = new StringBuilder(text.Length);
-            ParseState state = ParseState.Text;
-            StringBuilder entity = new StringBuilder(10);
+            var sb = new StringBuilder(text.Length);
+            var state = ParseState.Text;
+            var entity = new StringBuilder(10);
 
-            for (int i = 0; i < text.Length; i++)
+            for (var i = 0; i < text.Length; i++)
             {
                 switch (state)
                 {
@@ -617,10 +606,10 @@ namespace HtmlAgilityPack
                                 {
                                     if (entity[0] == '#')
                                     {
-                                        string e = entity.ToString();
+                                        var e = entity.ToString();
                                         try
  										{
-											string codeStr = e.Substring(1).Trim().ToLower();
+											var codeStr = e.Substring(1).Trim().ToLower();
 											int fromBase;
 											if (codeStr.StartsWith("x"))
 											{
@@ -631,7 +620,7 @@ namespace HtmlAgilityPack
 											{
 												fromBase = 10;
 											}
-											int code = Convert.ToInt32(codeStr, fromBase);
+											var code = Convert.ToInt32(codeStr, fromBase);
  											sb.Append(Convert.ToChar(code));
  										}
                                         catch
@@ -687,6 +676,7 @@ namespace HtmlAgilityPack
             {
                 sb.Append("&" + entity);
             }
+
             return sb.ToString();
         }
 
@@ -701,7 +691,8 @@ namespace HtmlAgilityPack
             {
                 throw new ArgumentNullException("node");
             }
-            HtmlNode result = node.CloneNode(true);
+
+            var result = node.CloneNode(true);
             if (result.HasAttributes)
                 Entitize(result.Attributes);
 
@@ -764,14 +755,14 @@ namespace HtmlAgilityPack
             if (text.Length == 0)
                 return text;
 
-            StringBuilder sb = new StringBuilder(text.Length);
-            for (int i = 0; i < text.Length; i++)
+            var sb = new StringBuilder(text.Length);
+            for (var i = 0; i < text.Length; i++)
             {
                 int code = text[i];
                 if ((code > 127) ||
                     (entitizeQuotAmpAndLtGt && ((code == 34) || (code == 38) || (code == 60) || (code == 62))))
                 {
-                    string entity = _entityName[code] as string;
+                    var entity = _entityName[code] as string;
                     if ((entity == null) || (!useNames))
                     {
                         sb.Append("&#" + code + ";");
@@ -790,21 +781,17 @@ namespace HtmlAgilityPack
             return sb.ToString();
         }
 
-        #endregion
-
-        #region Private Methods
-
         private static void Entitize(HtmlAttributeCollection collection)
         {
-            foreach (HtmlAttribute at in collection)
+            foreach (var attribute in collection)
             {
-                at.Value = Entitize(at.Value);
+                attribute.Value = Entitize(attribute.Value);
             }
         }
 
         private static void Entitize(HtmlNodeCollection collection)
         {
-            foreach (HtmlNode node in collection)
+            foreach (var node in collection)
             {
                 if (node.HasAttributes)
                     Entitize(node.Attributes);
@@ -823,16 +810,10 @@ namespace HtmlAgilityPack
             }
         }
 
-        #endregion
-
-        #region Nested type: ParseState
-
         private enum ParseState
         {
             Text,
             EntityStart
         }
-
-        #endregion
     }
 }

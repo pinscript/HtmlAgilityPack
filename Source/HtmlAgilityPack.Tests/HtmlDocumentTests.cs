@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 
 namespace HtmlAgilityPack.Tests
 {
@@ -62,6 +63,16 @@ namespace HtmlAgilityPack.Tests
             var link = doc.DocumentNode.SelectSingleNode("//a");
 
             Assert.AreEqual(string.Empty, link.Attributes["href"].ToString());
+        }
+
+        [Test]
+        public void Test_SaveXML()
+        {
+            var doc = new HtmlDocument("<html><head></head><body><a href>yo</a><a href=\"\">flo</a><a href=\"http://bar.se\">bar</a></body></html>");
+
+            var link = doc.DocumentNode.SelectSingleNode("//a");
+
+            Console.WriteLine(doc.Save());
         }
     }
 }

@@ -1411,7 +1411,7 @@ namespace HtmlAgilityPack
 				return;
 			}
 
-			foreach (HtmlNode node in _childnodes)
+			foreach (var node in _childnodes)
 			{
 				node.WriteTo(outText);
 			}
@@ -1449,20 +1449,15 @@ namespace HtmlAgilityPack
 				case HtmlNodeType.Document:
 					if (_ownerdocument.OptionOutputAsXml)
 					{
-#if SILVERLIGHT || PocketPC || METRO
-						outText.Write("<?xml version=\"1.0\" encoding=\"" + _ownerdocument.GetOutEncoding().WebName +
-									 "\"?>");
-#else
-						outText.Write("<?xml version=\"1.0\" encoding=\"" + _ownerdocument.GetOutEncoding().BodyName +
-									  "\"?>");
-#endif
+						outText.Write("<?xml version=\"1.0\" encoding=\"" + _ownerdocument.GetOutEncoding().BodyName + "\"?>");
+
 						// check there is a root element
 						if (_ownerdocument.DocumentNode.HasChildNodes)
 						{
-							int rootnodes = _ownerdocument.DocumentNode._childnodes.Count;
+							var rootnodes = _ownerdocument.DocumentNode._childnodes.Count;
 							if (rootnodes > 0)
 							{
-								HtmlNode xml = _ownerdocument.GetXmlDeclaration();
+								var xml = _ownerdocument.GetXmlDeclaration();
 								if (xml != null)
 									rootnodes--;
 
@@ -1485,6 +1480,7 @@ namespace HtmlAgilityPack
 							}
 						}
 					}
+
 					WriteContentTo(outText);
 					break;
 
@@ -1706,7 +1702,7 @@ namespace HtmlAgilityPack
 				if (_ownerdocument.Openednodes != null)
 					_ownerdocument.Openednodes.Remove(_outerstartindex);
 
-				HtmlNode self = Utilities.GetDictionaryValueOrNull(_ownerdocument.Lastnodes, Name);
+				HtmlNode self = _ownerdocument.Lastnodes.GetDictionaryValueOrNull(Name);
 				if (self == this)
 				{
 					_ownerdocument.Lastnodes.Remove(Name);
@@ -1742,7 +1738,7 @@ namespace HtmlAgilityPack
 		internal void WriteAttribute(TextWriter outText, HtmlAttribute att)
 		{
 			string name;
-			string quote = att.QuoteType == AttributeValueQuote.DoubleQuote ? "\"" : "'";
+			var quote = att.QuoteType == AttributeValueQuote.DoubleQuote ? "\"" : "'";
 			if (_ownerdocument.OptionOutputAsXml)
 			{
 				name = _ownerdocument.OptionOutputUpperCase ? att.XmlName.ToUpper() : att.XmlName;
@@ -1766,12 +1762,21 @@ namespace HtmlAgilityPack
 					}
 				}
 				if (_ownerdocument.OptionOutputOptimizeAttributeValues)
-					if (att.Value.IndexOfAny(new char[] { (char)10, (char)13, (char)9, ' ' }) < 0)
-						outText.Write(" " + name + "=" + att.Value);
-					else
-						outText.Write(" " + name + "=" + quote + att.Value + quote);
+				    if (att.Value.IndexOfAny(new[] {(char) 10, (char) 13, (char) 9, ' '}) < 0)
+				        outText.Write(" " + name + "=" + att.Value);
+				    else
+				        outText.Write(" " + name + "=" + quote + att.Value + quote);
 				else
-					outText.Write(" " + name + "=" + quote + att.Value + quote);
+				{
+				    if (att._hasQuotes)
+				    {
+				        outText.Write(" " + name + "=" + quote + att.Value + quote);
+				    }
+				    else
+				    {
+                        outText.Write(" " + name);
+				    }
+				}
 			}
 		}
 
@@ -1784,7 +1789,7 @@ namespace HtmlAgilityPack
 					return;
 				}
 				// we use Hashitems to make sure attributes are written only once
-				foreach (HtmlAttribute att in _attributes.Hashitems.Values)
+				foreach (var att in _attributes.Hashitems.Values)
 				{
 					WriteAttribute(outText, att);
 				}
@@ -1794,7 +1799,7 @@ namespace HtmlAgilityPack
 			if (!closing)
 			{
 				if (_attributes != null)
-					foreach (HtmlAttribute att in _attributes)
+					foreach (var att in _attributes)
 						WriteAttribute(outText, att);
 
 				if (!_ownerdocument.OptionAddDebuggingAttributes) return;
@@ -1803,10 +1808,9 @@ namespace HtmlAgilityPack
 				WriteAttribute(outText, _ownerdocument.CreateAttribute("_children", ChildNodes.Count.ToString()));
 
 				int i = 0;
-				foreach (HtmlNode n in ChildNodes)
+				foreach (var n in ChildNodes)
 				{
-					WriteAttribute(outText, _ownerdocument.CreateAttribute("_child_" + i,
-																		   n.Name));
+					WriteAttribute(outText, _ownerdocument.CreateAttribute("_child_" + i, n.Name));
 					i++;
 				}
 			}

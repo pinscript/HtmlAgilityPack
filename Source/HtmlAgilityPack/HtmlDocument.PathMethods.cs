@@ -26,15 +26,8 @@ namespace HtmlAgilityPack
             {
                 throw new ArgumentNullException("path");
             }
-            Encoding enc;
-            if (detectEncoding)
-            {
-                enc = DetectEncoding(path);
-            }
-            else
-            {
-                enc = null;
-            }
+            
+            var enc = detectEncoding ? DetectEncoding(path) : null;
 
             if (enc == null)
             {
@@ -56,9 +49,10 @@ namespace HtmlAgilityPack
             {
                 throw new ArgumentNullException("path");
             }
-            using (StreamReader sr = new StreamReader(path, OptionDefaultStreamEncoding))
+            
+            using (var sr = new StreamReader(path, OptionDefaultStreamEncoding))
             {
-                Encoding encoding = DetectEncoding(sr);
+                var encoding = DetectEncoding(sr);
                 return encoding;
             }
         }
@@ -72,7 +66,7 @@ namespace HtmlAgilityPack
             if (path == null)
                 throw new ArgumentNullException("path");
 
-            using(StreamReader sr = new StreamReader(path, OptionDefaultStreamEncoding))
+            using(var sr = new StreamReader(path, OptionDefaultStreamEncoding))
             {
                 Load(sr);
             }
@@ -88,7 +82,7 @@ namespace HtmlAgilityPack
             if (path == null)
                 throw new ArgumentNullException("path");
 
-           using(StreamReader sr = new StreamReader(path, detectEncodingFromByteOrderMarks))
+           using(var sr = new StreamReader(path, detectEncodingFromByteOrderMarks))
            {
                Load(sr);
            }
@@ -107,7 +101,7 @@ namespace HtmlAgilityPack
             if (encoding == null)
                 throw new ArgumentNullException("encoding");
 
-            using(StreamReader sr = new StreamReader(path, encoding))
+            using(var sr = new StreamReader(path, encoding))
             {
                 Load(sr);
             }
@@ -127,7 +121,7 @@ namespace HtmlAgilityPack
             if (encoding == null)
                 throw new ArgumentNullException("encoding");
 
-           using(StreamReader sr = new StreamReader(path, encoding, detectEncodingFromByteOrderMarks))
+           using(var sr = new StreamReader(path, encoding, detectEncodingFromByteOrderMarks))
            {
                Load(sr);
            }
@@ -148,18 +142,34 @@ namespace HtmlAgilityPack
             if (encoding == null)
                 throw new ArgumentNullException("encoding");
 
-           using(StreamReader sr = new StreamReader(path, encoding, detectEncodingFromByteOrderMarks, buffersize))
+           using(var sr = new StreamReader(path, encoding, detectEncodingFromByteOrderMarks, buffersize))
            {
                Load(sr);
            }
         }
+        
+        /// <summary>
+        /// Saves the mixed document to a returned string.
+        /// </summary>
+        /// <returns>String containing the saved document.</returns>
+        public string Save()
+        {
+            var sb = new StringBuilder();
+            using (var ss = new StringWriter(sb))
+            {
+                Save(ss);
+            }
+
+            return sb.ToString();
+        }
+
         /// <summary>
         /// Saves the mixed document to the specified file.
         /// </summary>
         /// <param name="filename">The location of the file where you want to save the document.</param>
         public void Save(string filename)
         {
-            using(StreamWriter sw = new StreamWriter(filename, false, GetOutEncoding()))
+            using(var sw = new StreamWriter(filename, false, GetOutEncoding()))
             {
                 Save(sw);
             }
@@ -180,11 +190,10 @@ namespace HtmlAgilityPack
             {
                 throw new ArgumentNullException("encoding");
             }
-            using(StreamWriter sw = new StreamWriter(filename, false, encoding))
+            using(var sw = new StreamWriter(filename, false, encoding))
             {
                 Save(sw);
             }
         }
-
     }
 }

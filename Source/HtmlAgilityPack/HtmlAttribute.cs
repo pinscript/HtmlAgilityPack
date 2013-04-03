@@ -18,7 +18,6 @@ namespace HtmlAgilityPack
     {
         #region Fields
 
-        private int _line;
         internal int _lineposition;
         internal string _name;
         internal int _namelength;
@@ -30,6 +29,7 @@ namespace HtmlAgilityPack
         internal string _value;
         internal int _valuelength;
         internal int _valuestartindex;
+        internal bool _hasQuotes;
 
         #endregion
 
@@ -47,11 +47,7 @@ namespace HtmlAgilityPack
         /// <summary>
         /// Gets the line number of this attribute in the document.
         /// </summary>
-        public int Line
-        {
-            get { return _line; }
-            internal set { _line = value; }
-        }
+        public int Line { get; internal set; }
 
         /// <summary>
         /// Gets the column number of this attribute in the document.
@@ -134,14 +130,7 @@ namespace HtmlAgilityPack
         /// </summary>
         public string Value
         {
-            get
-            {
-                if (_value == null)
-                {
-                    _value = _ownerdocument.Text.Substring(_valuestartindex, _valuelength);
-                }
-                return _value;
-            }
+            get { return _value ?? (_value = _ownerdocument.Text.Substring(_valuestartindex, _valuelength)); }
             set
             {
                 _value = value;
@@ -185,11 +174,12 @@ namespace HtmlAgilityPack
         /// <returns>A 32-bit signed integer that indicates the relative order of the names comparison.</returns>
         public int CompareTo(object obj)
         {
-            HtmlAttribute att = obj as HtmlAttribute;
+            var att = obj as HtmlAttribute;
             if (att == null)
             {
                 throw new ArgumentException("obj");
             }
+
             return Name.CompareTo(att.Name);
         }
 
@@ -203,9 +193,10 @@ namespace HtmlAgilityPack
         /// <returns>The cloned attribute.</returns>
         public HtmlAttribute Clone()
         {
-            HtmlAttribute att = new HtmlAttribute(_ownerdocument);
-            att.Name = Name;
-            att.Value = Value;
+            var att = new HtmlAttribute(_ownerdocument) {
+                Name = Name,
+                Value = Value
+            };
             return att;
         }
 
@@ -235,8 +226,8 @@ namespace HtmlAgilityPack
             if (OwnerNode == null)
                 return Name;
 
-            int i = 1;
-            foreach (HtmlAttribute node in OwnerNode.Attributes)
+            var i = 1;
+            foreach (var node in OwnerNode.Attributes)
             {
                 if (node.Name != Name) continue;
 

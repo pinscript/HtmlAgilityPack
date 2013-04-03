@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace HtmlAgilityPack
 {
@@ -13,8 +14,8 @@ namespace HtmlAgilityPack
         #region Fields
 
         internal Dictionary<string, HtmlAttribute> Hashitems = new Dictionary<string, HtmlAttribute>();
-        private HtmlNode _ownernode;
-        private List<HtmlAttribute> items = new List<HtmlAttribute>();
+        private readonly HtmlNode _ownernode;
+        private readonly List<HtmlAttribute> items = new List<HtmlAttribute>();
 
         #endregion
 
@@ -246,12 +247,7 @@ namespace HtmlAgilityPack
         /// <returns></returns>
         public bool Contains(string name)
         {
-            for (int i = 0; i < items.Count; i++)
-            {
-                if (items[i].Name.Equals(name.ToLower()))
-                    return true;
-            }
-            return false;
+            return items.Any(t => t.Name.Equals(name.ToLower()));
         }
 
         /// <summary>
@@ -328,11 +324,7 @@ namespace HtmlAgilityPack
         public IEnumerable<HtmlAttribute> AttributesWithName(string attributeName)
         {
             attributeName = attributeName.ToLower();
-            for (int i = 0; i < items.Count; i++)
-            {
-                if (items[i].Name.Equals(attributeName))
-                    yield return items[i];
-            }
+            return items.Where(t => t.Name.Equals(attributeName));
         }
 
         /// <summary>
