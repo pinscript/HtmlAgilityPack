@@ -328,6 +328,7 @@ namespace HtmlAgilityPack
 			{
 				throw new ArgumentNullException("name");
 			}
+
 			HtmlAttribute att = CreateAttribute(name);
 			att.Value = value;
 			return att;
@@ -1483,6 +1484,11 @@ namespace HtmlAgilityPack
 		{
 			_currentattribute._namelength = index - _currentattribute._namestartindex;
 			_currentnode.Attributes.Append(_currentattribute);
+
+            // Check next character
+		    var nextChar = Text[index + 1];
+            if(nextChar != '"' && nextChar != '\'')
+		        _currentattribute.QuoteType = AttributeValueQuote.NoQuotes;
 		}
 
 		private void PushAttributeNameStart(int index)
@@ -1507,7 +1513,9 @@ namespace HtmlAgilityPack
 		private void PushAttributeValueStart(int index, int quote)
 		{
 			_currentattribute._valuestartindex = index;
-		    _currentattribute._hasQuotes = true;
+
+            if (quote == 0)
+                _currentattribute.QuoteType = AttributeValueQuote.NoQuotes;
 
 			if (quote == '\'')
 				_currentattribute.QuoteType = AttributeValueQuote.SingleQuote;

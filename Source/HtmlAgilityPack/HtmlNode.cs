@@ -1738,7 +1738,20 @@ namespace HtmlAgilityPack
 		internal void WriteAttribute(TextWriter outText, HtmlAttribute att)
 		{
 			string name;
-			var quote = att.QuoteType == AttributeValueQuote.DoubleQuote ? "\"" : "'";
+		    string quote;
+            switch(att.QuoteType)
+            {
+                case AttributeValueQuote.NoQuotes:
+                    quote = "";
+                    break;
+                case AttributeValueQuote.SingleQuote:
+                    quote = "'";
+                    break;
+                default:
+                    quote = "\"";
+                    break;
+            }
+
 			if (_ownerdocument.OptionOutputAsXml)
 			{
 				name = _ownerdocument.OptionOutputUpperCase ? att.XmlName.ToUpper() : att.XmlName;
@@ -1761,21 +1774,28 @@ namespace HtmlAgilityPack
 						return;
 					}
 				}
+
 				if (_ownerdocument.OptionOutputOptimizeAttributeValues)
-				    if (att.Value.IndexOfAny(new[] {(char) 10, (char) 13, (char) 9, ' '}) < 0)
-				        outText.Write(" " + name + "=" + att.Value);
-				    else
-				        outText.Write(" " + name + "=" + quote + att.Value + quote);
-				else
+                {
+                    if (att.Value.IndexOfAny(new[] { (char)10, (char)13, (char)9, ' ' }) < 0)
+                    {
+                        outText.Write(" " + name + "=" + att.Value);
+                    }
+                    else
+                    {
+                        outText.Write(" " + name + "=" + quote + att.Value + quote);
+                    }
+                }
+                else
 				{
-				    if (att._hasQuotes)
-				    {
-				        outText.Write(" " + name + "=" + quote + att.Value + quote);
-				    }
-				    else
-				    {
-                        outText.Write(" " + name);
-				    }
+                    if(att.QuoteType == AttributeValueQuote.NoQuotes && string.IsNullOrEmpty(att.Value))
+                    {
+                        outText.Write(" " + name);   
+                    }
+                    else
+                    {
+                        outText.Write(" " + name + "=" + quote + att.Value + quote);   
+                    }
 				}
 			}
 		}

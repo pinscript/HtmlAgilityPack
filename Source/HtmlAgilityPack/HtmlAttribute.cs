@@ -29,7 +29,6 @@ namespace HtmlAgilityPack
         internal string _value;
         internal int _valuelength;
         internal int _valuestartindex;
-        internal bool _hasQuotes;
 
         #endregion
 
@@ -254,6 +253,10 @@ namespace HtmlAgilityPack
         /// <summary>
         /// A double quote mark "
         /// </summary>
-        DoubleQuote
+        DoubleQuote,
+        /// <summary>
+        /// No quotes
+        /// </summary>
+        NoQuotes
     }
 }

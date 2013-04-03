@@ -67,13 +67,57 @@ namespace HtmlAgilityPack.Tests
         }
 
         [Test]
-        public void Test_SaveXML()
+        public void Test_SaveXML_Does_Not_Add_Quotes_To_Attribute_Without_Quotes_When_Loading()
         {
-            var doc = new HtmlDocument("<html><head></head><body><a href>yo</a><a href=\"\">flo</a><a href=\"http://bar.se\">bar</a></body></html>");
+            var doc = new HtmlDocument("<html><head></head><body><a href>yo</a></body></html>");
 
-            var link = doc.DocumentNode.SelectSingleNode("//a");
+            var html = doc.Save();
 
-            Console.WriteLine(doc.Save());
+            Assert.AreEqual("<html><head></head><body><a href>yo</a></body></html>", html);
+        }
+
+        [Test]
+        public void Test_SaveXML_Does_Not_Add_Value_To_Attribute_Without_Value_When_Loading()
+        {
+            var doc = new HtmlDocument("<html><head></head><body><a href=\"\">yo</a></body></html>");
+
+            var html = doc.Save();
+
+            Assert.AreEqual("<html><head></head><body><a href=\"\">yo</a></body></html>", html);
+        }
+
+        [Test]
+        public void Test_SaveXML_Does_Not_Add_Quote_To_Attribute_Loading_And_Attribute_Is_Not_Empty()
+        {
+            var doc = new HtmlDocument("<html><head></head><body><a href=foo>yo</a></body></html>");
+
+            var html = doc.Save();
+
+            Assert.AreEqual("<html><head></head><body><a href=foo>yo</a></body></html>", html);
+        }
+
+        [Test]
+        public void Test_SaveXML_Does_Change_Quotes_On_Attributes()
+        {
+            var doc = new HtmlDocument("<html><head></head><body><a href=\"foo\">yo</a></body></html>");
+            Assert.AreEqual("<html><head></head><body><a href=\"foo\">yo</a></body></html>", doc.Save());
+
+            doc = new HtmlDocument("<html><head></head><body><a href='foo'>yo</a></body></html>");
+            Assert.AreEqual("<html><head></head><body><a href='foo'>yo</a></body></html>", doc.Save());
+        }
+
+        [Test]
+        public void Test_Constructing_Document()
+        {
+            var doc = new HtmlDocument();
+            var a = doc.CreateElement("a");
+            a.SetAttributeValue("href", "foo");
+            a.InnerHtml = "foo";
+
+            doc.DocumentNode.AppendChild(a);
+
+            var html = doc.Save();
+            Console.WriteLine(html);
         }
     }
 }
