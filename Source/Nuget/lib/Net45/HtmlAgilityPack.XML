@@ -445,6 +445,13 @@
             <param name="def">The default value to return if not found.</param>
             <returns>The value of the attribute if found, the default value if not found.</returns>
         </member>
+        <member name="M:HtmlAgilityPack.HtmlNode.HasAttribute(System.String)">
+            <summary>
+            Check if this node has a specific attribute defined.
+            </summary>
+            <param name="name">The attribute name.</param>
+            <returns>True if attribute exists otherwise false.</returns>
+        </member>
         <member name="M:HtmlAgilityPack.HtmlNode.InsertAfter(HtmlAgilityPack.HtmlNode,HtmlAgilityPack.HtmlNode)">
             <summary>
             Inserts the specified node immediately after the specified reference node.
@@ -855,6 +862,12 @@
             <summary>
             Creates an instance of an HTML document.
             </summary>
+        </member>
+        <member name="M:HtmlAgilityPack.HtmlDocument.#ctor(System.String)">
+            <summary>
+            Creates an instance of an HTML document ands loads the provided HTML.
+            </summary>
+            <param name="html"></param>
         </member>
         <member name="M:HtmlAgilityPack.HtmlDocument.GetXmlName(System.String)">
             <summary>
@@ -1836,8 +1849,14 @@
         </member>
         <member name="M:HtmlAgilityPack.HtmlAttribute.Remove">
             <summary>
-            Removes this attribute from it's parents collection
+            Removes this attribute from it's parents collection.
             </summary>
+        </member>
+        <member name="M:HtmlAgilityPack.HtmlAttribute.ToString">
+            <summary>
+            Returns this attributes value.
+            </summary>
+            <returns></returns>
         </member>
         <member name="P:HtmlAgilityPack.HtmlAttribute.Line">
             <summary>

@@ -147,13 +147,16 @@ namespace HtmlAgilityPack
 		public HtmlDocument()
 		{
 			_documentnode = CreateNode(HtmlNodeType.Document, 0);
-#if SILVERLIGHT || METRO
-            OptionDefaultStreamEncoding =Encoding.UTF8;
-#else
-			OptionDefaultStreamEncoding = Encoding.Default;
-#endif
-
 		}
+
+        /// <summary>
+        /// Creates an instance of an HTML document ands loads the provided HTML.
+        /// </summary>
+        /// <param name="html"></param>
+	    public HtmlDocument(string html) : this()
+	    {
+	        LoadHtml(html);
+	    }
 
 		#endregion
 
@@ -655,7 +658,8 @@ namespace HtmlAgilityPack
 			{
 				throw new ArgumentNullException("html");
 			}
-            using (StringReader sr = new StringReader(html))
+
+            using (var sr = new StringReader(html))
             {
                 Load(sr);
             }

@@ -210,11 +210,20 @@ namespace HtmlAgilityPack
         }
 
         /// <summary>
-        /// Removes this attribute from it's parents collection
+        /// Removes this attribute from it's parents collection.
         /// </summary>
         public void Remove()
         {
             _ownernode.Attributes.Remove(this);
+        }
+
+        /// <summary>
+        /// Returns this attributes value.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return Value;
         }
 
         #endregion

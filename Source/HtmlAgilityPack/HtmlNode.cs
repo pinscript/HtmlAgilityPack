@@ -1100,6 +1100,16 @@ namespace HtmlAgilityPack
 			}
 		}
 
+        /// <summary>
+        /// Check if this node has a specific attribute defined.
+        /// </summary>
+        /// <param name="name">The attribute name.</param>
+        /// <returns>True if attribute exists otherwise false.</returns>
+        public bool HasAttribute(string name)
+        {
+            return Attributes[name] != null;
+        }
+
 		/// <summary>
 		/// Inserts the specified node immediately after the specified reference node.
 		/// </summary>
