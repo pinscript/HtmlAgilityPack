@@ -1,6 +1,6 @@
 # Unofficial, opinionated fork of HtmlAgilityPack
 
-The original (awsome) project, hosted over at http://htmlagilitypack.codeplex.com, seems to be dead. This is why I decided to fork it and maintain my own version. Current modifications:
+The original (awsome) project, hosted over at http://htmlagilitypack.codeplex.com, seems to be inactive (several, in my eyes, critical issues has not been fixed for years). This is why I decided to fork it and maintain my own version. Current modifications:
 
 * HtmlDocument constructor accepts html. No need to call LoadHtml.
 * Added HtmlDocument.Save() which returns the saved html. No need to provide your own streams.
