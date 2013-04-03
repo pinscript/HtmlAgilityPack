@@ -140,5 +140,11 @@ namespace HtmlAgilityPack.Tests
 
             Assert.AreEqual("<a href=\"foo\" b=\"c\" target=\"_blank\">foo</a>", doc.Save());
         }
+
+        [Test]
+        public void Test_Closing_Image()
+        {
+            Console.WriteLine(HtmlNode.CreateNode("<p><img id=\"foo\"></img></p>").OuterHtml);
+        }
     }
 }
