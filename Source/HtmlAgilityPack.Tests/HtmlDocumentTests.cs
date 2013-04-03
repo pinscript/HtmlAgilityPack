@@ -26,16 +26,6 @@ namespace HtmlAgilityPack.Tests
 		}
 
 		[Test]
-		public void StackOverflow()
-		{
-			var url = "http://rewarding.me/active-tel-domains/index.php/index.php?rescan=amour.tel&w=A&url=&by=us&limits=0";
-			var request = WebRequest.Create(url);
-			var htmlDocument = new HtmlDocument();
-			htmlDocument.Load((request.GetResponse()).GetResponseStream());
-			Stream memoryStream = new MemoryStream();
-			htmlDocument.Save(memoryStream);
-		}
-		[Test]
 		public void CreateAttribute()
 		{
 			var doc = new HtmlDocument();
