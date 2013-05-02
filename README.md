@@ -1,12 +1,12 @@
 # Unofficial, opinionated fork of HtmlAgilityPack
 
-The original (awsome) project, hosted over at http://htmlagilitypack.codeplex.com, seems to be inactive (several, in my eyes, critical issues has not been fixed for years). This is why I decided to fork it and maintain my own version. Current modifications:
+The original (awesome) project, hosted over at http://htmlagilitypack.codeplex.com, seems to be inactive (several, in my eyes, critical issues has not been fixed for years). This is why I decided to fork it and maintain my own version. Current modifications:
 
-* HtmlDocument constructor accepts html. No need to call LoadHtml.
-* Added HtmlDocument.Save() which returns the saved html. No need to provide your own streams.
-* HtmlNode.SelectNodes returns an empty list if no elements matched the query. No need for null checks.
-* HtmlAttribute.ToString() returns attribute value.
-* Added HasAttribute(string name) to HtmlAttribute. 
+* `HtmlDocument` constructor accepts HTML. No need to call `LoadHtml`.
+* Added `HtmlDocument.Save()` which returns the saved HTML. No need to provide your own streams.
+* `HtmlNode.SelectNodes` returns an empty list if no elements matched the query. No need for `null` checks.
+* `HtmlAttribute.ToString()` returns the attribute value.
+* Added `HasAttribute(string name)` to `HtmlAttribute`. 
 * Attributes without quotes when loading does not get quotes when saving document.
 
 ## License
